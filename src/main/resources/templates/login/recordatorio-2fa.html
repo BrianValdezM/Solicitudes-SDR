@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal de solicitudes · Activar verificación en dos pasos</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/barra-superior :: barra}"></div>
+
+<div class="contenedor-pagina">
+    <div class="tarjeta" style="max-width:520px;">
+        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
+        <h2 class="tarjeta__subtitulo">Protege tu cuenta con 2FA</h2>
+
+        <p class="tarjeta__texto">
+            Aún no tienes activada la <b>verificación en dos pasos (2FA)</b>.
+            Añadir esta capa extra evita que alguien más acceda a tu cuenta
+            aunque conozca tu contraseña.
+        </p>
+
+        <p class="tarjeta__texto">
+            Al activarla, cada que inicies sesión te pediremos un código de 6 dígitos
+            generado por una app como Google Authenticator, Microsoft Authenticator o Authy.
+        </p>
+
+        <form th:action="@{/recordatorio-2fa}" method="post"
+              style="display:flex; gap:10px; margin-top:22px;">
+            <button type="submit" name="decision" value="si" class="boton-principal" style="flex:1;">
+                Sí, activarlo ahora
+            </button>
+            <button type="submit" name="decision" value="no" class="boton-principal"
+                    style="flex:1; background:#6b7280;">
+                Recordármelo después
+            </button>
+        </form>
+
+        <p class="tarjeta__texto" style="margin-top:16px; font-size:0.8rem;">
+            Si eliges "después", te lo volveremos a preguntar en 7 días.
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

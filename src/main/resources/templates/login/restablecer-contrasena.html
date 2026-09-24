@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal de solicitudes · Restablecer contraseña</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/password-meter.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/barra-superior :: barra}"></div>
+
+<div class="contenedor-pagina">
+    <div class="tarjeta">
+        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
+        <h2 class="tarjeta__subtitulo">Restablecer contraseña</h2>
+
+        <div th:if="${restablecidoConExito}">
+            <div class="alerta alerta--exito">Tu contraseña se actualizó correctamente.</div>
+            <a th:href="@{/login}" class="boton-principal" style="display:block;text-decoration:none;">Iniciar sesión</a>
+        </div>
+
+        <div th:unless="${restablecidoConExito}">
+            <div th:unless="${tokenValido}" class="alerta alerta--error">
+                Este enlace ya no es válido o expiró. Solicita uno nuevo.
+            </div>
+
+            <div th:if="${tokenValido}">
+                <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
+
+                <form th:action="@{/restablecer-contrasena}" method="post">
+                    <input type="hidden" name="token" th:value="${token}">
+                    <div class="campo">
+                         <label for="contrasenaNueva">Contraseña nueva</label>
+                         <input type="password" id="contrasenaNueva" name="contrasenaNueva"
+                                                                       required data-pwd-input>
+                         <div data-pwd-meter></div>
+                         <div data-pwd-label></div>
+                    </div>
+                    <div class="campo">
+                        <label for="confirmarContrasena">Confirmar contraseña nueva</label>
+                        <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+                    </div>
+                    <p class="tarjeta__texto">Mínimo 8 caracteres, con mayúscula, minúscula, número y símbolo.</p>
+                    <button type="submit" class="boton-principal">Restablecer contraseña</button>
+                </form>
+            </div>
+
+            <a th:href="@{/login}" class="enlace-secundario">Volver a iniciar sesión</a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/password-meter.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal de solicitudes · Recuperar contraseña</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/barra-superior :: barra}"></div>
+
+<div class="contenedor-pagina">
+    <div class="tarjeta">
+        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
+        <h2 class="tarjeta__subtitulo">Recuperar contraseña</h2>
+
+        <div th:if="${mensajeInfo}" class="alerta alerta--info" th:text="${mensajeInfo}"></div>
+
+        <p class="tarjeta__texto">
+            Escribe tu correo registrado y te enviaremos un enlace para
+            restablecer tu contraseña.
+        </p>
+
+        <form th:action="@{/olvide-contrasena}" method="post">
+            <div class="campo">
+                <label for="correo">Correo</label>
+                <input type="email" id="correo" name="correo" required autofocus>
+            </div>
+            <button type="submit" class="boton-principal">Enviar enlace</button>
+        </form>
+
+        <a th:href="@{/login}" class="enlace-secundario">Volver a iniciar sesión</a>
+    </div>
+</div>
+
+</body>
+</html>

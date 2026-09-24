@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="pagina(titulo, activo, contenido)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' · Portal de solicitudes'">Portal de solicitudes</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/plantilla.css}">
+</head>
+<body class="cuerpo-app">
+
+<!-- ============ BARRA SUPERIOR ============ -->
+<header class="topbar">
+    <div class="topbar__izq">
+        <img th:src="@{/img/LogoSDR_2025.png}" alt="SDR Safe Data" class="topbar__logo">
+        <span class="topbar__titulo">Portal de solicitudes</span>
+    </div>
+
+    <nav class="topbar__menu">
+        <a th:href="@{/solicitudes}"
+           th:classappend="${activo == 'inicio'} ? 'activo'"
+           class="menu-item">Inicio</a>
+
+        <a th:href="@{/solicitudes/listado}"
+           th:classappend="${activo == 'solicitudes'} ? 'activo'"
+           class="menu-item">Solicitudes</a>
+
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/admin/usuarios}"
+           th:classappend="${activo == 'usuarios'} ? 'activo'"
+           class="menu-item">Usuarios</a>
+    </nav>
+
+    <div class="topbar__der">
+        <span class="bienvenida">Bienvenido</span>
+        <span class="usuario" th:text="${session.nombreCompleto} ?: 'Invitado'">Usuario</span>
+        <form th:action="@{/logout}" method="post" class="salir-form">
+            <button type="submit" class="boton-salir" title="Cerrar sesión">⎋</button>
+        </form>
+    </div>
+</header>
+
+<!-- ============ LAYOUT: SIDEBAR + CONTENIDO ============ -->
+<div class="layout">
+
+    <aside class="sidebar" id="sidebar">
+        <button type="button" class="sidebar__toggle" onclick="toggleSidebar()"
+                title="Expandir / contraer menú">
+            <span class="sidebar__toggle-icono">☰</span>
+        </button>
+
+        <a th:href="@{/solicitudes}"
+           th:classappend="${activo == 'inicio'} ? 'activo'"
+           class="sidebar__item">
+            <span class="sidebar__icono">🏠</span>
+            <span class="sidebar__texto">Inicio</span>
+        </a>
+
+        <a th:href="@{/solicitudes/nueva}"
+           th:classappend="${activo == 'nueva'} ? 'activo'"
+           class="sidebar__item">
+            <span class="sidebar__icono">📝</span>
+            <span class="sidebar__texto">Nueva solicitud</span>
+        </a>
+
+        <a th:href="@{/solicitudes/listado}"
+           th:classappend="${activo == 'solicitudes'} ? 'activo'"
+           class="sidebar__item">
+            <span class="sidebar__icono">📋</span>
+            <span class="sidebar__texto">Listado</span>
+        </a>
+
+        <a th:href="@{/reportes}"
+           th:classappend="${activo == 'reportes'} ? 'activo'"
+           class="sidebar__item">
+            <span class="sidebar__icono">📊</span>
+            <span class="sidebar__texto">Reportes</span>
+        </a>
+
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/admin/usuarios}"
+           th:classappend="${activo == 'usuarios'} ? 'activo'"
+           class="sidebar__item">
+            <span class="sidebar__icono">👥</span>
+            <span class="sidebar__texto">Usuarios</span>
+        </a>
+    </aside>
+
+    <main class="contenido">
+        <div th:replace="${contenido}"></div>
+    </main>
+</div>
+
+<script th:inline="javascript">
+    function toggleSidebar() {
+        document.body.classList.toggle('sidebar-expandido');
+        localStorage.setItem('sidebarExpandido',
+            document.body.classList.contains('sidebar-expandido'));
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        if (localStorage.getItem('sidebarExpandido') === 'true') {
+            document.body.classList.add('sidebar-expandido');
+        }
+    });
+</script>
+
+</body>
+</html>

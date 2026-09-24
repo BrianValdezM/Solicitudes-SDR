@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal de solicitudes · Iniciar sesión</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/barra-superior :: barra}"></div>
+
+<div class="contenedor-pagina">
+    <div class="tarjeta">
+        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
+        <h2 class="tarjeta__subtitulo">Iniciar sesión</h2>
+
+        <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
+        <div th:if="${mensajeInfo}" class="alerta alerta--info" th:text="${mensajeInfo}"></div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="campo">
+                <label for="correo">Usuario (correo)</label>
+                <input type="email" id="correo" name="correo" autocomplete="username" required autofocus>
+            </div>
+            <div class="campo">
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" required>
+            </div>
+            <button type="submit" class="boton-principal">Entrar</button>
+        </form>
+
+        <a th:href="@{/olvide-contrasena}" class="enlace-secundario">¿Olvidaste tu contraseña?</a>
+
+        <div th:replace="~{fragments/marca-pie :: pie}"></div>
+    </div>
+</div>
+
+</body>
+</html>

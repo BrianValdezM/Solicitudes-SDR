@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/plantilla :: pagina('Inicio', 'inicio', ~{::contenido})}">
+<body>
+<div th:fragment="contenido">
+    <div class="tarjeta">
+        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
+        <h2 class="tarjeta__subtitulo" th:text="'Hola, ' + ${nombreCompleto}">Hola</h2>
+        <p class="tarjeta__texto">
+            Aquí va el contenido real del portal (módulos, solicitudes, etc.).
+            Esta pantalla es solo un placeholder para confirmar que el login,
+            el 2FA y la expiración de contraseña ya están funcionando.
+        </p>
+    </div>
+</div>
+</body>
+</html>

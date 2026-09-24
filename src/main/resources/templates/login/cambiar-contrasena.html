@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Portal de solicitudes · Cambiar contraseña</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <link rel="stylesheet" th:href="@{/css/password-meter.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/barra-superior :: barra}"></div>
+
+<div class="contenedor-pagina">
+    <div class="tarjeta">
+        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
+        <h2 class="tarjeta__subtitulo">Cambiar contraseña</h2>
+
+        <div th:if="${obligatorio}" class="alerta alerta--info">
+            Tu contraseña venció (expira cada 3 meses). Debes crear una nueva para continuar.
+        </div>
+        <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
+
+        <form th:action="@{/cambiar-contrasena}" method="post">
+            <div class="campo">
+                <label for="contrasenaActual">Contraseña actual</label>
+                <input type="password" id="contrasenaActual" name="contrasenaActual" required autofocus>
+            </div>
+            <div class="campo">
+                <label for="contrasenaNueva">Contraseña nueva</label>
+                <input type="password" id="contrasenaNueva" name="contrasenaNueva"
+                                                required data-pwd-input>
+                <div data-pwd-meter></div>
+                <div data-pwd-label></div>
+            </div>
+            <div class="campo">
+                <label for="confirmarContrasena">Confirmar contraseña nueva</label>
+                <input type="password" id="confirmarContrasena" name="confirmarContrasena" required>
+            </div>
+            <p class="tarjeta__texto">Mínimo 8 caracteres, con mayúscula, minúscula, número y símbolo.</p>
+            <button type="submit" class="boton-principal">Guardar nueva contraseña</button>
+        </form>
+    </div>
+</div>
+
+<script th:src="@{/js/password-meter.js}"></script>
+
+</body>
+</html>

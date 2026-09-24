@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/plantilla :: pagina('Nuevo usuario', 'usuarios', ~{::contenido})}">
+<body>
+<div th:fragment="contenido">
+
+    <div class="tarjeta" style="max-width:520px;">
+        <h1 class="tarjeta__titulo">Nuevo usuario</h1>
+
+        <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
+
+        <form th:action="@{/admin/usuarios}" method="post">
+            <div class="campo"><label>Nombre</label>
+                <input name="nombre" th:value="${nombre}" required></div>
+            <div class="campo"><label>Apellidos</label>
+                <input name="apellidos" th:value="${apellidos}" required></div>
+            <div class="campo"><label>Correo</label>
+                <input type="email" name="correo" th:value="${correo}" required></div>
+            <div class="campo"><label>Teléfono (opcional)</label>
+                <input name="telefono" th:value="${telefono}"></div>
+            <div class="campo"><label>Rol</label>
+                <select name="rol">
+                    <option value="USUARIO">USUARIO</option>
+                    <option value="ADMIN">ADMIN</option>
+                </select></div>
+            <div class="campo"><label>ID Cliente</label>
+                    <input name="idCliente" th:value="${idCliente}"></div>
+            <button class="boton-principal" type="submit">Crear y enviar contraseña</button>
+        </form>
+
+        <a th:href="@{/admin/usuarios}" class="enlace-secundario">← Volver al listado</a>
+    </div>
+
+</div>
+</body>
+</html>

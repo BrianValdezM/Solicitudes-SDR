@@ -1,0 +1,228 @@
+/* =========================================================
+   Portal de Solicitudes - SDR Safe Data
+   Hoja de estilos única
+   ========================================================= */
+
+:root {
+  --azul-principal: #14477a;
+  --azul-oscuro: #0c3057;
+  --azul-claro: #eaf1fa;
+  --dorado: #d4a017;
+  --texto: #2b2f36;
+  --texto-suave: #6b7280;
+  --borde: #dfe4ea;
+  --error: #c0392b;
+  --exito: #1e824c;
+  --radio: 10px;
+  --sombra: 0 10px 30px rgba(20, 71, 122, 0.12);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--azul-claro) 0%, #ffffff 40%);
+  color: var(--texto);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Barra superior gruesa, como en el mockup */
+.barra-superior {
+  height: 64px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--azul-oscuro), var(--azul-principal));
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.barra-superior__logo {
+  height: 38px;
+  max-height: 70%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Contenedor centrado tipo "página" */
+.contenedor-pagina {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+/* Tarjeta principal (login, 2FA, recuperación, etc.) */
+.tarjeta {
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  width: 100%;
+  max-width: 380px;
+  padding: 36px 32px;
+  text-align: center;
+  animation: aparecer 0.35s ease-out;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tarjeta__titulo {
+  color: var(--dorado);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0 0 22px;
+  letter-spacing: 0.3px;
+}
+
+.tarjeta__subtitulo {
+  color: var(--azul-principal);
+  font-weight: 500;
+  font-size: 1.05rem;
+  margin: 0 0 22px;
+  text-align: left;
+}
+
+.tarjeta__texto {
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+  margin: -8px 0 20px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+/* Campos de formulario estilo "línea" como el mockup */
+.campo {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+  margin-bottom: 6px;
+}
+
+.campo input {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid var(--borde);
+  padding: 6px 2px 8px;
+  font-size: 0.98rem;
+  background: transparent;
+  color: var(--texto);
+  transition: border-color 0.2s ease;
+}
+
+.campo input:focus {
+  outline: none;
+  border-bottom-color: var(--azul-principal);
+}
+
+.campo--codigo input {
+  letter-spacing: 6px;
+  font-size: 1.3rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.boton-principal {
+  width: 100%;
+  background: var(--azul-principal);
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  padding: 11px 18px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  margin-top: 6px;
+}
+
+.boton-principal:hover { background: var(--azul-oscuro); }
+.boton-principal:active { transform: scale(0.98); }
+
+.enlace-secundario {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: var(--azul-principal);
+  text-decoration: none;
+}
+.enlace-secundario:hover { text-decoration: underline; }
+
+.marca-pie {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.marca-pie__logo {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.alerta {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+  text-align: left;
+}
+.alerta--error {
+  background: #fdecea;
+  color: var(--error);
+  border: 1px solid #f5c6cb;
+}
+.alerta--exito {
+  background: #eafaf1;
+  color: var(--exito);
+  border: 1px solid #c3e6cb;
+}
+.alerta--info {
+  background: var(--azul-claro);
+  color: var(--azul-principal);
+  border: 1px solid #cfe0f3;
+}
+
+.qr-2fa {
+  background: #fff;
+  padding: 10px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.secreto-manual {
+  font-family: "Consolas", monospace;
+  background: var(--azul-claro);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  word-break: break-all;
+  margin-bottom: 16px;
+}
+
+.campo--checkbox {
+    background: #f7f9fc;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+}
+
+.campo--checkbox input[type="checkbox"] {
+    accent-color: var(--azul-principal);
+    transform: scale(1.15);
+}
