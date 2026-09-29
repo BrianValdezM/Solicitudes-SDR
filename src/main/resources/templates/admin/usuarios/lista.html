@@ -7,6 +7,7 @@
     <div class="tarjeta" style="max-width:1200px;">
         <h1 class="tarjeta__titulo">Usuarios</h1>
 
+        <!-- ============ ALERTAS ============ -->
         <div th:if="${param.creado}" class="alerta alerta--exito">
             Usuario creado. Se envió la contraseña temporal por correo.
         </div>
@@ -19,14 +20,90 @@
         <div th:if="${mensajeExito}" class="alerta alerta--exito" th:text="${mensajeExito}"></div>
         <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
 
-        <div style="margin-bottom:18px;">
+        <!-- ============ FILTROS ============ -->
+        <form method="get" th:action="@{/admin/usuarios}"
+              style="background:#f7f9fc; border:1px solid #dfe4ea; border-radius:8px;
+                     padding:14px 16px; margin-bottom:18px;">
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+                  gap:12px; align-items:end;">
+
+                <div class="campo" style="margin:0;">
+                    <label for="fNombre">Nombre</label>
+                    <input type="text" id="fNombre" name="nombre"
+                           th:value="${filtroNombre}" placeholder="Ej. Juan">
+                </div>
+
+                <div class="campo" style="margin:0;">
+                    <label for="fApellidos">Apellidos</label>
+                    <input type="text" id="fApellidos" name="apellidos"
+                           th:value="${filtroApellidos}" placeholder="Ej. Pérez">
+                </div>
+                
+                <div class="campo" style="margin:0;">
+                    <label for="fCorreo">Correo</label>
+                    <input type="email" id="fCorreo" name="correo"
+                           th:value="${filtroCorreo}" placeholder="Ej. juan@empresa.com">
+                </div>
+
+                <div class="campo" style="margin:0;">
+                    <label for="fIdCliente">ID Cliente</label>
+                    <input type="text" id="fIdCliente" name="idCliente"
+                           th:value="${filtroIdCliente}" placeholder="Ej. CLI-001">
+                </div>
+
+                <div class="campo" style="margin:0;">
+                    <label for="fEstado">Estado</label>
+                    <select id="fEstado" name="estado">
+                        <option value=""         th:selected="${filtroEstado == null or filtroEstado == ''}">Todos</option>
+                        <option value="activo"   th:selected="${filtroEstado == 'activo'}">Activos</option>
+                        <option value="inactivo" th:selected="${filtroEstado == 'inactivo'}">Inactivos</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="margin:0;">
+                    <label for="fRol">Rol</label>
+                    <select id="fRol" name="rol">
+                        <option value=""        th:selected="${filtroRol == null or filtroRol == ''}">Todos</option>
+                        <option value="USUARIO" th:selected="${filtroRol == 'USUARIO'}">USUARIO</option>
+                        <option value="ADMIN"   th:selected="${filtroRol == 'ADMIN'}">ADMIN</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:14px; justify-content:flex-end;">
+                <a th:if="${hayFiltros}" th:href="@{/admin/usuarios}"
+                   class="boton-principal"
+                   style="display:inline-block;text-decoration:none;width:auto;
+                          padding:8px 18px;background:#6b7280;">
+                    Limpiar filtros
+                </a>
+                <button type="submit" class="boton-principal"
+                        style="width:auto;padding:8px 22px;">
+                    🔍 Buscar
+                </button>
+            </div>
+        </form>
+
+        <!-- ============ BARRA SUPERIOR: CONTADOR + NUEVO ============ -->
+        <div style="display:flex; justify-content:space-between; align-items:center;
+                    margin-bottom:14px;">
+            <span style="color:#6b7280; font-size:0.85rem;">
+                <span th:text="${#lists.size(usuarios)}">0</span>
+                <span th:if="${#lists.size(usuarios) == 1}">usuario</span>
+                <span th:unless="${#lists.size(usuarios) == 1}">usuarios</span>
+            </span>
+
             <a th:href="@{/admin/usuarios/nuevo}" class="boton-principal"
                style="display:inline-block;text-decoration:none;width:auto;padding:8px 18px;">
                 + Nuevo usuario
             </a>
         </div>
 
-        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+        <!-- ============ TABLA ============ -->
+        <table th:if="${!#lists.isEmpty(usuarios)}"
+               style="width:100%;border-collapse:collapse;font-size:0.9rem;">
             <thead>
             <tr style="text-align:left;border-bottom:2px solid #dfe4ea;background:#f7f9fc;">
                 <th style="padding:10px 8px;">Nombre</th>
@@ -49,7 +126,6 @@
                 </td>
                 <td style="padding:10px 8px;" th:text="${u.rol}"></td>
                 <td style="padding:10px 8px;">
-                    <!-- Bloque: activo/inactivo y estado de contraseña -->
                     <span th:if="${!u.activo}"
                           style="color:#6b7280; font-weight:600;">Inactivo</span>
                     <span th:if="${u.activo and u.debeCambiarContrasena}"
@@ -59,12 +135,10 @@
                 </td>
                 <td style="padding:10px 8px;text-align:center;white-space:nowrap;">
 
-                    <!-- Editar -->
                     <a th:href="@{'/admin/usuarios/' + ${u.id} + '/editar'}"
                        class="boton-accion boton-accion--editar"
                        title="Editar usuario">✏️</a>
 
-                    <!-- Cambiar estado (activar/desactivar) -->
                     <form th:action="@{'/admin/usuarios/' + ${u.id} + '/estado'}"
                           method="post" style="display:inline;"
                           onsubmit="return confirm('¿Cambiar el estado de este usuario?');">
@@ -76,7 +150,6 @@
                         </button>
                     </form>
 
-                    <!-- Eliminar -->
                     <form th:action="@{'/admin/usuarios/' + ${u.id} + '/eliminar'}"
                           method="post" style="display:inline;"
                           onsubmit="return confirm('¿Eliminar definitivamente a este usuario? Esta acción no se puede deshacer.');">
@@ -89,10 +162,13 @@
             </tbody>
         </table>
 
+        <!-- ============ MENSAJE CUANDO NO HAY RESULTADOS ============ -->
         <p th:if="${#lists.isEmpty(usuarios)}"
            style="text-align:center;color:#6b7280;margin-top:24px;">
-            No hay usuarios registrados.
+            <span th:if="${hayFiltros}">No se encontraron usuarios con esos filtros.</span>
+            <span th:unless="${hayFiltros}">No hay usuarios registrados aún.</span>
         </p>
+
     </div>
 
 </div>

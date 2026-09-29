@@ -2,10 +2,12 @@ package com.safedata.sdr.solicitudes.controller;
 
 import com.safedata.sdr.solicitudes.model.Usuario;
 import com.safedata.sdr.solicitudes.repository.UsuarioRepository;
+import com.safedata.sdr.solicitudes.repository.spec.UsuarioSpecifications;
 import com.safedata.sdr.solicitudes.service.UsuarioAdminService;
 
 import jakarta.servlet.http.HttpSession;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,38 @@ public class AdminUsuarioController {
 
     // ---- Listado ----
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("usuarios", usuarioRepository.findAll());
+    public String listar(@RequestParam(required = false) String nombre,
+                         @RequestParam(required = false) String apellidos,
+                         @RequestParam(required = false) String correo,
+                         @RequestParam(required = false) String idCliente,
+                         @RequestParam(required = false) String estado,
+                         @RequestParam(required = false) String rol,
+                         Model model) {
+
+        Boolean activo = null;
+        if ("activo".equals(estado))        activo = true;
+        else if ("inactivo".equals(estado)) activo = false;
+
+        Specification<Usuario> spec = UsuarioSpecifications
+                .conFiltros(nombre, apellidos, correo, idCliente, activo, rol);
+
+        model.addAttribute("usuarios", usuarioRepository.findAll(spec));
+
+        model.addAttribute("filtroNombre",    nombre);
+        model.addAttribute("filtroApellidos", apellidos);
+        model.addAttribute("filtroCorreo",    correo);       // ← NUEVO
+        model.addAttribute("filtroIdCliente", idCliente);
+        model.addAttribute("filtroEstado",    estado);
+        model.addAttribute("filtroRol",       rol);
+
+        boolean hayFiltros = (nombre != null && !nombre.isBlank())
+                || (apellidos != null && !apellidos.isBlank())
+                || (correo != null && !correo.isBlank())      // ← NUEVO
+                || (idCliente != null && !idCliente.isBlank())
+                || (estado != null && !estado.isBlank())
+                || (rol != null && !rol.isBlank());
+        model.addAttribute("hayFiltros", hayFiltros);
+
         return "admin/usuarios/lista";
     }
 

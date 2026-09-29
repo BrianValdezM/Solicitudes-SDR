@@ -3,15 +3,125 @@
       th:replace="~{fragments/plantilla :: pagina('Inicio', 'inicio', ~{::contenido})}">
 <body>
 <div th:fragment="contenido">
-    <div class="tarjeta">
-        <h1 class="tarjeta__titulo">Portal de solicitudes</h1>
-        <h2 class="tarjeta__subtitulo" th:text="'Hola, ' + ${nombreCompleto}">Hola</h2>
-        <p class="tarjeta__texto">
-            Aquí va el contenido real del portal (módulos, solicitudes, etc.).
-            Esta pantalla es solo un placeholder para confirmar que el login,
-            el 2FA y la expiración de contraseña ya están funcionando.
-        </p>
+
+    <div class="panel-solicitudes">
+
+        <h1 class="panel-solicitudes__titulo">Inicio</h1>
+
+        <!-- ============ FILTROS ============ -->
+        <form method="get" th:action="@{/solicitudes}" id="formFiltros">
+
+            <div class="filtros">
+
+                <div class="filtro">
+                    <label for="folio">Folio:</label>
+                    <input type="text" id="folio" name="folio">
+                </div>
+
+                <div class="filtro">
+                    <label for="estado">Estado:</label>
+                    <select id="estado" name="estado">
+                        <option value="">Select</option>
+                        <option value="ABIERTA">Abierta</option>
+                        <option value="EN_PROCESO">En proceso</option>
+                        <option value="CERRADA">Cerrada</option>
+                        <option value="CANCELADA">Cancelada</option>
+                    </select>
+                </div>
+
+                <div class="filtro">
+                    <label for="fechaAlta">Fecha alta:</label>
+                    <input type="date" id="fechaAlta" name="fechaAlta">
+                </div>
+
+                <div class="filtro">
+                    <label for="fechaCierre">Fecha cierre:</label>
+                    <input type="date" id="fechaCierre" name="fechaCierre">
+                </div>
+
+                <div class="filtro">
+                    <label for="fechaCancelacion">Fecha cancelación:</label>
+                    <input type="date" id="fechaCancelacion" name="fechaCancelacion">
+                </div>
+
+                <!-- Celda vacía para mantener el grid de 3 columnas alineado -->
+                <div></div>
+
+            </div>
+
+            <div class="filtros-acciones">
+                <button type="submit" class="boton-buscar">Buscar</button>
+            </div>
+
+        </form>
+
+        <!-- ============ TABLA ============ -->
+        <table class="tabla-solicitudes">
+            <thead>
+            <tr>
+                <th style="width:12%;">Folio</th>
+                <th style="width:16%;">Estado</th>
+                <th style="width:14%;">Fecha alta</th>
+                <th style="width:14%;">Fecha Cierre</th>
+                <th style="width:14%;">Fecha Creación</th>
+                <th style="width:10%;">Ver</th>
+                <th style="width:10%;">Editar</th>
+                <th style="width:10%;">Borrar</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <!-- ============================================================
+                 MOMENTO DE CONECTAR BACKEND:
+                 Reemplaza esta fila por un th:each sobre tu lista:
+
+                 <tr th:each="s : ${solicitudes}">
+                     <td th:text="${s.folio}"></td>
+                     <td th:text="${s.estado}"></td>
+                     <td th:text="${#temporals.format(s.fechaAlta, 'dd/MM/yyyy')}"></td>
+                     <td th:text="${s.fechaCierre != null ? #temporals.format(s.fechaCierre, 'dd/MM/yyyy') : '—'}"></td>
+                     <td th:text="${#temporals.format(s.fechaCreacion, 'dd/MM/yyyy HH:mm')}"></td>
+                     <td><a class="boton-sol boton-sol--ver" th:href="@{'/solicitudes/' + ${s.id}}">👁</a></td>
+                     <td><a class="boton-sol boton-sol--editar" th:href="@{'/solicitudes/' + ${s.id} + '/editar'}">✎</a></td>
+                     <td>
+                         <form th:action="@{'/solicitudes/' + ${s.id} + '/eliminar'}" method="post"
+                               onsubmit="return confirm('¿Eliminar esta solicitud?');"
+                               style="display:inline;">
+                             <button type="submit" class="boton-sol boton-sol--borrar">✕</button>
+                         </form>
+                     </td>
+                 </tr>
+                 ============================================================ -->
+
+            <!-- Fila placeholder (mientras no hay backend) -->
+            <tr class="fila-vacia">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <div class="acciones-sol">
+                        <a href="#" class="boton-sol boton-sol--ver" title="Ver">👁</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="acciones-sol">
+                        <a href="#" class="boton-sol boton-sol--editar" title="Editar">✎</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="acciones-sol">
+                        <a href="#" class="boton-sol boton-sol--borrar" title="Borrar">✕</a>
+                    </div>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
     </div>
+
 </div>
 </body>
 </html>
