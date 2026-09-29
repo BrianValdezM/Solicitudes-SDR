@@ -30,7 +30,7 @@ public class LoginController {
         return "login/login";
     }
 
-    @GetMapping("/solicitudes")
+    @GetMapping("/inicio")
     public String dashboard(Model model, HttpSession session) {
         model.addAttribute("nombreCompleto", session.getAttribute("nombreCompleto"));
         return "dashboard";

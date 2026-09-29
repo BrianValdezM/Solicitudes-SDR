@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/plantilla :: pagina('Solicitudes', 'solicitudes', ~{::contenido})}">
+<body>
+<div th:fragment="contenido">
+
+    <div class="bienvenida">
+        <h1 class="bienvenida__titulo">Solicitudes</h1>
+        <p class="bienvenida__subtitulo">Selecciona el tipo de operación que deseas gestionar.</p>
+    </div>
+
+    <div class="modulos">
+
+        <a th:href="@{/inicio}" class="modulo">
+            <div class="modulo__icono">📋</div>
+            <h2 class="modulo__titulo">Solicitudes</h2>
+            <p class="modulo__descripcion">
+                Consulta, crea y administra las solicitudes del portal.
+            </p>
+        </a>
+
+        <a th:href="@{/solicitudes/envios}" class="modulo modulo--envio">
+            <div class="modulo__icono">🚚</div>
+            <h2 class="modulo__titulo">Envíos</h2>
+            <p class="modulo__descripcion">
+                Registra y da seguimiento a los envíos de documentos.
+            </p>
+        </a>
+
+        <a th:href="@{/solicitudes/recolecciones}" class="modulo modulo--recoleccion">
+            <div class="modulo__icono">📦</div>
+            <h2 class="modulo__titulo">Recolecciones</h2>
+            <p class="modulo__descripcion">
+                Programa y administra las recolecciones de documentos.
+            </p>
+        </a>
+
+    </div>
+
+</div>
+</body>
+</html>

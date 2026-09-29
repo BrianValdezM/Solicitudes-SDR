@@ -20,11 +20,11 @@
     </div>
 
     <nav class="topbar__menu">
-        <a th:href="@{/solicitudes}"
+        <a th:href="@{/inicio}"
            th:classappend="${activo == 'inicio'} ? 'activo'"
            class="menu-item">Inicio</a>
 
-        <a th:href="@{/solicitudes/listado}"
+        <a th:href="@{/solicitudes}"
            th:classappend="${activo == 'solicitudes'} ? 'activo'"
            class="menu-item">Solicitudes</a>
 
@@ -35,7 +35,7 @@
     </nav>
 
     <div class="topbar__der">
-        <span class="bienvenida">Bienvenido</span>
+        <span class="">Bienvenido</span>
         <span class="usuario" th:text="${session.nombreCompleto} ?: 'Invitado'">Usuario</span>
         <form th:action="@{/logout}" method="post" class="salir-form">
             <button type="submit" class="boton-salir" title="Cerrar sesión">⎋</button>
