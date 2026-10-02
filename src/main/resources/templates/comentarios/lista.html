@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/plantilla :: pagina('Comentarios', 'comentarios', ~{::contenido})}">
+<body>
+<div th:fragment="contenido">
+
+    <div class="panel-solicitudes">
+
+        <h1 class="panel-solicitudes__titulo">Comentarios</h1>
+
+        <!-- ============ ALERTAS ============ -->
+        <div th:if="${mensajeExito}" class="alerta alerta--exito" th:text="${mensajeExito}"></div>
+        <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
+
+        <!-- ============ AGREGAR / EDITAR COMENTARIO ============ -->
+<form method="post" th:action="@{/comentarios}" id="formAgregar">
+
+    <!-- Campo oculto: presente solo cuando estamos editando -->
+    <input type="hidden" name="id"
+           th:if="${comentarioEnEdicion != null}"
+           th:value="${comentarioEnEdicion.id}">
+           
+               <input type="hidden" name="page" th:value="${pagina.number}">   <!-- NUEVO -->
+           
+
+    <div class="comentario-nuevo">
+
+        <div class="comentario-nuevo__folio">
+            <label for="folioNuevo">Folio:</label>
+            <input type="text" id="folioNuevo" name="folio" required
+                   th:value="${comentarioEnEdicion != null ? comentarioEnEdicion.folio : ''}">
+        </div>
+
+        <div class="comentario-nuevo__cuerpo">
+            <label for="comentario">Comentario:</label>
+            <textarea id="comentario" name="comentario" required
+                      th:text="${comentarioEnEdicion != null ? comentarioEnEdicion.comentario : ''}"></textarea>
+        </div>
+
+        <div class="comentario-nuevo__accion">
+            <!-- Botón cambia según modo -->
+            <button type="submit" class="boton-buscar"
+                    th:text="${comentarioEnEdicion != null ? 'Actualizar' : 'Agregar'}">
+                Agregar
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Botón "Cancelar edición" solo cuando estamos editando -->
+    <div th:if="${comentarioEnEdicion != null}"
+         style="text-align:right; margin-top:-16px; margin-bottom:16px;">
+        <a th:href="@{/comentarios}"
+           style="font-size:0.82rem; color:#6b7280; text-decoration:underline;">
+            Cancelar edición
+        </a>
+    </div>
+
+</form>
+
+        <!-- ============ BUSCAR POR FOLIO ============ -->
+        <form method="get" th:action="@{/comentarios}">
+            <div class="comentario-buscar">
+                <label for="folioBuscar">Folio:</label>
+                <input type="text" id="folioBuscar" name="folio"
+                       th:value="${filtroFolio}">
+                <button type="submit" class="boton-buscar">Buscar</button>
+            </div>
+        </form>
+
+        <!-- ============ TABLA ============ -->
+        <table class="tabla-solicitudes" th:if="${!#lists.isEmpty(comentarios)}">
+            <thead>
+            <tr>
+                <th style="width:12%;">Folio</th>
+                <th style="width:44%;">Comentario</th>
+                <th style="width:16%;">Usuario</th>
+                <th style="width:12%;">Fecha</th>
+                <th style="width:8%;">Editar</th>
+                <th style="width:8%;">Borrar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${comentarios}">
+                <td th:text="${c.folio}"></td>
+                <td style="text-align:left;" th:text="${c.comentario}"></td>
+                <td th:text="${c.nombreUsuario}"></td>
+                <td th:text="${#temporals.format(c.fecha, 'dd/MM/yyyy HH:mm')}"></td>
+                <td>
+                    <div class="acciones-sol">
+                        <a th:href="@{'/comentarios?editar=' + ${c.id}}"
+   class="boton-sol boton-sol--editar"
+   title="Editar">✎</a>
+                    </div>
+                </td>
+                <td>
+                    <div class="acciones-sol">
+                        <form th:action="@{'/comentarios/' + ${c.id} + '/eliminar'}"
+                              method="post"
+                              onsubmit="return confirm('¿Eliminar este comentario?');">
+                              <input type="hidden" name="page" th:value="${pagina.number}">
+                            <button type="submit" class="boton-sol boton-sol--borrar"
+                                    title="Borrar">✕</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        
+        <!-- ============ PAGINACIÓN ============ -->
+<div th:if="${pagina.totalPages > 1}" class="paginacion">
+
+    <!-- Anterior -->
+    <a th:if="${pagina.hasPrevious()}"
+       th:href="@{/comentarios(page=${pagina.number - 1}, folio=${filtroFolio})}"
+       class="paginacion__btn">← Anterior</a>
+    <span th:unless="${pagina.hasPrevious()}"
+          class="paginacion__btn paginacion__btn--disabled">← Anterior</span>
+
+    <!-- Números (ventana de 5 alrededor de la actual) -->
+<th:block th:with="inicio=${pagina.number - 2 < 0 ? 0 : (pagina.number + 2 >= pagina.totalPages ? pagina.totalPages - 5 < 0 ? 0 : pagina.totalPages - 5 : pagina.number - 2)},
+                   fin=${pagina.number + 2 >= pagina.totalPages ? pagina.totalPages - 1 : (pagina.number - 2 < 0 ? (5 > pagina.totalPages ? pagina.totalPages - 1 : 4) : pagina.number + 2)}">
+    <a th:each="i : ${#numbers.sequence(inicio, fin)}"
+       th:href="@{/comentarios(page=${i}, folio=${filtroFolio})}"
+       th:text="${i + 1}"
+       th:classappend="${i == pagina.number} ? 'paginacion__btn--activo'"
+       class="paginacion__btn">1</a>
+</th:block>
+
+    <!-- Siguiente -->
+    <a th:if="${pagina.hasNext()}"
+       th:href="@{/comentarios(page=${pagina.number + 1}, folio=${filtroFolio})}"
+       class="paginacion__btn">Siguiente →</a>
+    <span th:unless="${pagina.hasNext()}"
+          class="paginacion__btn paginacion__btn--disabled">Siguiente →</span>
+
+    <!-- Info -->
+    <span class="paginacion__info">
+        Página <b th:text="${pagina.number + 1}">1</b>
+        de <b th:text="${pagina.totalPages}">1</b>
+        (<b th:text="${pagina.totalElements}">0</b> comentarios)
+    </span>
+</div>
+
+        <!-- ============ MENSAJE CUANDO NO HAY DATOS ============ -->
+        <p th:if="${#lists.isEmpty(comentarios)}"
+   style="text-align:center;color:#6b7280;margin-top:24px;font-size:0.85rem;">
+    <span th:if="${filtroFolio != null and !filtroFolio.isBlank()}">
+        No se encontraron comentarios para ese folio.
+    </span>
+    <span th:unless="${filtroFolio != null and !filtroFolio.isBlank()}">
+        <span th:if="${esAdmin}">No hay comentarios registrados.</span>
+        <span th:unless="${esAdmin}">Aún no has publicado comentarios.</span>
+    </span>
+</p>
+
+        <!-- ============ BOTONES INFERIORES ============ -->
+        <div class="comentario-acciones-finales">
+    <a th:href="@{/inicio}" class="boton-accion-final">Salir</a>
+    <button type="submit" form="formAgregar" class="boton-accion-final"
+            th:text="${comentarioEnEdicion != null ? 'Actualizar' : 'Guardar'}">
+        Guardar
+    </button>
+</div>
+
+    </div>
+
+</div>
+</body>
+</html>

@@ -30,7 +30,7 @@
 
         <a sec:authorize="hasRole('ADMIN')"
            th:href="@{/admin/usuarios}"
-           th:classappend="${activo == 'usuarios'} ? 'activo'"
+           th:classappend="${activo == 'usuarios' or activo == 'usuarios-nuevo' or activo == 'usuarios-editar'} ? 'activo'"
            class="menu-item">Usuarios</a>
     </nav>
 
@@ -47,47 +47,81 @@
 <div class="layout">
 
     <aside class="sidebar" id="sidebar">
-        <button type="button" class="sidebar__toggle" onclick="toggleSidebar()"
-                title="Expandir / contraer menú">
-            <span class="sidebar__toggle-icono">☰</span>
-        </button>
+    <button type="button" class="sidebar__toggle" onclick="toggleSidebar()"
+            title="Expandir / contraer menú">
+        <span class="sidebar__toggle-icono">☰</span>
+    </button>
 
-        <a th:href="@{/solicitudes}"
+    <!-- ============ SIDEBAR: INICIO ============ -->
+    <th:block th:if="${activo == 'inicio'}">
+        <a th:href="@{/inicio}"
            th:classappend="${activo == 'inicio'} ? 'activo'"
            class="sidebar__item">
             <span class="sidebar__icono">🏠</span>
             <span class="sidebar__texto">Inicio</span>
         </a>
-
-        <a th:href="@{/solicitudes/nueva}"
-           th:classappend="${activo == 'nueva'} ? 'activo'"
+        <a th:href="@{/comentarios}"
            class="sidebar__item">
-            <span class="sidebar__icono">📝</span>
-            <span class="sidebar__texto">Nueva solicitud</span>
+            <span class="sidebar__icono">💬</span>
+            <span class="sidebar__texto">Comentarios</span>
         </a>
+    </th:block>
 
-        <a th:href="@{/solicitudes/listado}"
+    <!-- ============ SIDEBAR: SOLICITUDES ============ -->
+    <th:block th:if="${activo == 'solicitudes'}">
+        <a th:href="@{/solicitudes}"
            th:classappend="${activo == 'solicitudes'} ? 'activo'"
            class="sidebar__item">
             <span class="sidebar__icono">📋</span>
-            <span class="sidebar__texto">Listado</span>
+            <span class="sidebar__texto">Solicitudes</span>
         </a>
-
-        <a th:href="@{/reportes}"
-           th:classappend="${activo == 'reportes'} ? 'activo'"
+        <a th:href="@{/solicitudes/nueva-envio}"
            class="sidebar__item">
-            <span class="sidebar__icono">📊</span>
-            <span class="sidebar__texto">Reportes</span>
+            <span class="sidebar__icono">🚚</span>
+            <span class="sidebar__texto">Alta de envío</span>
         </a>
-
-        <a sec:authorize="hasRole('ADMIN')"
-           th:href="@{/admin/usuarios}"
-           th:classappend="${activo == 'usuarios'} ? 'activo'"
+        <a th:href="@{/solicitudes/nueva-recoleccion}"
            class="sidebar__item">
-            <span class="sidebar__icono">👥</span>
-            <span class="sidebar__texto">Usuarios</span>
+            <span class="sidebar__icono">📦</span>
+            <span class="sidebar__texto">Alta de recolección</span>
         </a>
-    </aside>
+    </th:block>
+    
+    <!-- ============ SIDEBAR: COMENTARIOS ============ -->
+<th:block th:if="${activo == 'comentarios'}">
+    <a th:href="@{/inicio}"
+          th:classappend="${activo == 'inicio'} ? 'activo'"
+       class="sidebar__item">
+        <span class="sidebar__icono">🏠</span>
+        <span class="sidebar__texto">Inicio</span>
+    </a>
+    <a th:href="@{/comentarios}"
+       th:classappend="${activo == 'comentarios'} ? 'activo'"
+       class="sidebar__item">
+        <span class="sidebar__icono">💬</span>
+        <span class="sidebar__texto">Comentarios</span>
+    </a>
+</th:block>
+
+    <!-- ============ SIDEBAR: USUARIOS ============ -->
+<th:block th:if="${activo == 'usuarios' or activo == 'usuarios-nuevo' or activo == 'usuarios-editar'}">
+
+    <a th:href="@{/admin/usuarios}"
+       th:classappend="${activo == 'usuarios'} ? 'activo'"
+       class="sidebar__item">
+        <span class="sidebar__icono">👥</span>
+        <span class="sidebar__texto">Usuarios</span>
+    </a>
+
+    <a th:href="@{/admin/usuarios/nuevo}"
+       th:classappend="${activo == 'usuarios-nuevo' or activo == 'usuarios-editar'} ? 'activo'"
+       class="sidebar__item">
+        <span class="sidebar__icono">➕</span>
+        <span class="sidebar__texto">Nuevo usuario</span>
+    </a>
+
+</th:block>
+</aside>
 
     <main class="contenido">
         <div th:replace="${contenido}"></div>

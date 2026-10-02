@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{fragments/plantilla :: pagina('Editar usuario', 'usuarios', ~{::contenido})}">
+      th:replace="~{fragments/plantilla :: pagina('Editar usuario', 'usuarios-editar', ~{::contenido})}">
 <body>
 <div th:fragment="contenido">
 
-    <div class="tarjeta" style="max-width:520px;">
+    <div class="tarjeta" style="max-width:520px; margin: 0 auto;">
         <h1 class="tarjeta__titulo">Editar usuario</h1>
 
         <div th:if="${mensajeError}" class="alerta alerta--error" th:text="${mensajeError}"></div>
